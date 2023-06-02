@@ -79,12 +79,12 @@ class _HomeScreenState extends State<HomeScreen> {
                   style: const TextStyle(fontSize: 25, color: Colors.white),
                   decoration: InputDecoration(
                       hintText: 'Enter Location',
-                      hintStyle: TextStyle(
+                      hintStyle: const TextStyle(
                         fontSize: 20,
                         color: Colors.white70,
                       ),
                       border: InputBorder.none,
-                      prefixIcon: Icon(
+                      prefixIcon: const Icon(
                         Icons.location_on_rounded,
                         size: 30,
                       ),
@@ -178,7 +178,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           subregion = counObj['subregion'];
                           setState(() {});
                         },
-                        child: Icon(
+                        child: const Icon(
                           Icons.search_rounded,
                           size: 30,
                         ),
@@ -188,121 +188,254 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             ),
-            ElevatedButton(
-                onPressed: () async {
-                  var sendCity = GetCityGiveLatLon(placeName.text);
-                  var lattLonn = await sendCity.GetLatLon();
-                  var lat = lattLonn['lat'];
-                  var lon = lattLonn['lon'];
-                  var sendLatLon = await GetLatLanGiveWeatherData(lat, lon);
-                  var data = await sendLatLon.FetchData();
-                  lattt = data['lat'].toString();
-                  lonnn = data['lon'].toString();
-                  desc = data['desc'];
-                  temp = (data['temp'] - 273.15).toString();
-                  temp2 = double.parse(temp);
-                  temp3 = temp2.toStringAsFixed(2);
-                  pressure = data['pressure'].toString();
-                  humidity = data['humidity'].toString();
-                  wind_speed = (data['wind_speed'] * 3.6).toString();
-                  wind_speed2 = double.parse(wind_speed);
-                  wind_speed3 = wind_speed2.toStringAsFixed(1);
-                  //country = data['country'];
-                  //time convert
-                  int rise = data['sunrise'];
-                  DateTime dateTime1 =
-                      DateTime.fromMillisecondsSinceEpoch(rise * 1000);
-
-                  String formatDate(DateTime dateTime1) {
-                    String period = 'AM';
-                    int hour = dateTime1.hour;
-                    if (hour >= 12) {
-                      period = 'PM';
-                      if (hour > 12) {
-                        hour -= 12;
-                      }
-                    }
-                    String minutes =
-                        dateTime1.minute.toString().padLeft(2, '0');
-                    String formattedTime = '$hour:$minutes $period';
-                    return formattedTime;
-                  }
-
-                  sunrise = formatDate(dateTime1);
-
-                  int set = data['sunset'];
-                  DateTime dateTime2 =
-                      DateTime.fromMillisecondsSinceEpoch(set * 1000);
-                  String formatDate2(DateTime dateTime2) {
-                    String period = 'AM';
-                    int hour = dateTime2.hour;
-                    if (hour >= 12) {
-                      period = 'PM';
-                      if (hour > 12) {
-                        hour -= 12;
-                      }
-                    }
-                    String minutes =
-                        dateTime2.minute.toString().padLeft(2, '0');
-                    String formattedTime = '$hour:$minutes $period';
-                    return formattedTime;
-                  }
-
-                  sunset = formatDate2(dateTime2);
-
-                  //timezone = data['timezone'].toString();
-                  int timezoneOffsetSeconds = data['timezone'];
-                  String getUTCOffset(int timezoneOffsetSeconds) {
-                    Duration offset =
-                        Duration(seconds: timezoneOffsetSeconds.abs());
-                    String sign = (timezoneOffsetSeconds >= 0) ? '+' : '-';
-
-                    int hours = offset.inHours;
-                    int minutes = offset.inMinutes.remainder(60);
-
-                    String offsetString =
-                        '$sign${hours.toString().padLeft(2, '0')}:${minutes.toString().padLeft(2, '0')}';
-                    return 'UTC$offsetString';
-                  }
-
-                  timezone = getUTCOffset(timezoneOffsetSeconds);
-                  var sendingCode = await CountryName(data['country']);
-                  var counObj = await sendingCode.getFullName();
-                  Ccountry = counObj['Cname'];
-                  Fcountry = counObj['Oname'];
-                  countryCapital = counObj['capital'];
-                  continents = counObj['continent'];
-                  subregion = counObj['subregion'];
-                  setState(() {});
-                },
-                child: const Text('Get')),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Text('latitude $lattt'),
-                Text('longitude $lonnn'),
-                Text('country $Ccountry')
-              ],
+            const SizedBox(
+              height: 30,
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [Text('temp $temp3'), Text('description $desc')],
+            Container(
+              width: 350,
+              height: 170,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(50),
+                  border: Border.all(color: Colors.white54),
+                  gradient: LinearGradient(colors: [
+                    Colors.white.withOpacity(0.30),
+                    Colors.white.withOpacity(0.20),
+                    Colors.white.withOpacity(0.30)
+                  ], begin: Alignment.topRight, end: Alignment.bottomLeft)),
+              child: Row(
+                children: [
+                  Container(
+                    width: 149,
+                    child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            '$temp3',
+                            style: TextStyle(
+                                fontSize: 50,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.white),
+                          ),
+                          Text(
+                            ' $desc',
+                            style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.w300,
+                                color: Colors.white),
+                          )
+                        ]),
+                  ),
+                  Container(
+                    width: 199,
+                    //color: Colors.amber,
+                  )
+                ],
+              ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Text('pressure $pressure'),
-                Text('humiduty $humidity'),
-                Text('wind speed $wind_speed3')
-              ],
+            SizedBox(
+              height: 20,
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Text('sunrise $sunrise'),
-                Text('sunset $sunset'),
-                Text('timezone $timezone')
-              ],
+            Container(
+              width: 380,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Container(
+                      width: 110,
+                      height: 50,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(color: Colors.white54),
+                          gradient: LinearGradient(colors: [
+                            Colors.white.withOpacity(0.30),
+                            Colors.white.withOpacity(0.20),
+                            Colors.white.withOpacity(0.30)
+                          ])),
+                      child: Column(
+                        children: [
+                          const Text(
+                            'latitude',
+                            style: TextStyle(color: Colors.white, fontSize: 20),
+                          ),
+                          Text(lattt,
+                              style: const TextStyle(
+                                  color: Colors.white, fontSize: 20))
+                        ],
+                      )),
+                  Container(
+                      width: 120,
+                      height: 50,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(color: Colors.white54),
+                          gradient: LinearGradient(colors: [
+                            Colors.white.withOpacity(0.30),
+                            Colors.white.withOpacity(0.20),
+                            Colors.white.withOpacity(0.30)
+                          ])),
+                      child: Column(
+                        children: [
+                          const Text('longitude',
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 20)),
+                          Text(lonnn,
+                              style: const TextStyle(
+                                  color: Colors.white, fontSize: 20))
+                        ],
+                      )),
+                  Container(
+                      width: 110,
+                      height: 50,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(color: Colors.white54),
+                          gradient: LinearGradient(colors: [
+                            Colors.white.withOpacity(0.30),
+                            Colors.white.withOpacity(0.20),
+                            Colors.white.withOpacity(0.30)
+                          ])),
+                      child: Column(
+                        children: [
+                          const Text('country',
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 20)),
+                          Text(
+                            Ccountry,
+                            style: const TextStyle(
+                                color: Colors.white, fontSize: 20),
+                          )
+                        ],
+                      ))
+                ],
+              ),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            SizedBox(
+              height: 290,
+              width: 350,
+              child: Column(
+                children: [
+                  Container(
+                      margin: const EdgeInsets.only(
+                          bottom: 10.0, left: 0, right: 0, top: 0),
+                      width: double.infinity,
+                      height: 90,
+                      decoration: BoxDecoration(
+                          gradient: LinearGradient(colors: [
+                            Colors.white.withOpacity(0.30),
+                            Colors.white.withOpacity(0.20),
+                            Colors.white.withOpacity(0.30)
+                          ]),
+                          borderRadius: BorderRadius.circular(35)),
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(8.0, 0, 12, 0),
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(children: [
+                                Icon(Icons.forest_rounded),
+                                Text('Pressure',
+                                    style: const TextStyle(
+                                        color: Colors.white, fontSize: 20)),
+                              ]),
+                              Text(pressure,
+                                  style: const TextStyle(
+                                      color: Colors.white, fontSize: 20))
+                            ]),
+                      )),
+                  Container(
+                    margin: EdgeInsets.only(
+                        bottom: 10.0, left: 0, right: 0, top: 0),
+                    width: double.infinity,
+                    height: 90,
+                    decoration: BoxDecoration(
+                        gradient: LinearGradient(colors: [
+                          Colors.white.withOpacity(0.30),
+                          Colors.white.withOpacity(0.20),
+                          Colors.white.withOpacity(0.30)
+                        ]),
+                        borderRadius: BorderRadius.circular(35)),
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(8.0, 0, 12, 0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              Icon(Icons.abc_outlined),
+                              Text('Humidity',
+                                  style: const TextStyle(
+                                      color: Colors.white, fontSize: 20))
+                            ],
+                          ),
+                          Text(humidity,
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 20))
+                        ],
+                      ),
+                    ),
+                  ),
+                  Container(
+                    width: double.infinity,
+                    height: 90,
+                    decoration: BoxDecoration(
+                        gradient: LinearGradient(colors: [
+                          Colors.white.withOpacity(0.30),
+                          Colors.white.withOpacity(0.20),
+                          Colors.white.withOpacity(0.30)
+                        ]),
+                        borderRadius: BorderRadius.circular(35)),
+                    //child: Text('wind speed $wind_speed3')
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(8, 0, 12, 0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              Icon(Icons.add_box_rounded),
+                              Text('Wind speed',
+                                  style: const TextStyle(
+                                      color: Colors.white, fontSize: 20))
+                            ],
+                          ),
+                          Text(wind_speed3,
+                              style: const TextStyle(
+                                  color: Colors.white, fontSize: 20))
+                        ],
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            SizedBox(
+              width: 350,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Container(
+                      width: 100,
+                      height: 100,
+                      color: Colors.amber,
+                      child: Text('sunrise $sunrise')),
+                  Container(
+                      width: 100,
+                      height: 100,
+                      color: Colors.pink,
+                      child: Text('sunset $sunset')),
+                  Container(
+                      width: 100,
+                      height: 100,
+                      color: Colors.cyanAccent,
+                      child: Text('timezone $timezone'))
+                ],
+              ),
             )
           ],
         )),
