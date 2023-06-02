@@ -32,12 +32,18 @@ class _HomeScreenState extends State<HomeScreen> {
   var lonnn = '';
   var desc = '';
   var temp = '';
+  late double temp2;
+  var temp3 = '';
   var pressure = '';
   var humidity = '';
   var wind_speed = '';
   var sunrise = '';
   var sunset = '';
-  var country = '';
+  var Ccountry = '';
+  var Fcountry = '';
+  var countryCapital = '';
+  var continents = '';
+  var subregion = '';
   var timezone = '';
   @override
   Widget build(BuildContext context) {
@@ -61,11 +67,13 @@ class _HomeScreenState extends State<HomeScreen> {
                   lattt = data['lat'].toString();
                   lonnn = data['lon'].toString();
                   desc = data['desc'];
-                  temp = data['temp'].toString();
+                  temp = (data['temp'] - 273.15).toString();
+                  temp2 = double.parse(temp);
+                  temp3 = temp2.toStringAsFixed(2);
                   pressure = data['pressure'].toString();
                   humidity = data['humidity'].toString();
                   wind_speed = data['wind_speed'].toString();
-                  country = data['country'];
+                  //country = data['country'];
                   //time convert
                   int rise = data['sunrise'];
                   DateTime dateTime1 =
@@ -124,6 +132,13 @@ class _HomeScreenState extends State<HomeScreen> {
                   }
 
                   timezone = getUTCOffset(timezoneOffsetSeconds);
+                  var sendingCode = await CountryName(data['country']);
+                  var counObj = await sendingCode.getFullName();
+                  Ccountry = counObj['Cname'];
+                  Fcountry = counObj['Oname'];
+                  countryCapital = counObj['capital'];
+                  continents = counObj['continent'];
+                  subregion = counObj['subregion'];
                   setState(() {});
                 },
                 child: const Text('Get')),
@@ -132,12 +147,12 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 Text('latitude $lattt'),
                 Text('longitude $lonnn'),
-                Text('country $country')
+                Text('country $Ccountry')
               ],
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [Text('temp $temp'), Text('description $desc')],
+              children: [Text('temp $temp3'), Text('description $desc')],
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -203,5 +218,23 @@ class GetLatLanGiveWeatherData {
       'timezone': data['timezone']
     };
     return (impData);
+  }
+}
+
+class CountryName {
+  var code;
+  CountryName(this.code);
+  Future<Map> getFullName() async {
+    Response responseCoun =
+        await get(Uri.parse('https://restcountries.com/v3.1/alpha/$code'));
+    List countryDetails = jsonDecode(responseCoun.body);
+    Map details = {
+      'Cname': countryDetails[0]['name']['common'],
+      'Oname': countryDetails[0]['name']['official'],
+      'capital': countryDetails[0]['capital'][0],
+      'continent': countryDetails[0]['region'],
+      'subregion': countryDetails[0]['subregion']
+    };
+    return details;
   }
 }
