@@ -37,6 +37,8 @@ class _HomeScreenState extends State<HomeScreen> {
   var pressure = '';
   var humidity = '';
   var wind_speed = '';
+  late double wind_speed2;
+  var wind_speed3 = '';
   var sunrise = '';
   var sunset = '';
   var Ccountry = '';
@@ -72,7 +74,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   temp3 = temp2.toStringAsFixed(2);
                   pressure = data['pressure'].toString();
                   humidity = data['humidity'].toString();
-                  wind_speed = data['wind_speed'].toString();
+                  wind_speed = (data['wind_speed'] * 3.6).toString();
+                  wind_speed2 = double.parse(wind_speed);
+                  wind_speed3 = wind_speed2.toStringAsFixed(1);
                   //country = data['country'];
                   //time convert
                   int rise = data['sunrise'];
@@ -159,7 +163,7 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 Text('pressure $pressure'),
                 Text('humiduty $humidity'),
-                Text('wind speed $wind_speed')
+                Text('wind speed $wind_speed3')
               ],
             ),
             Row(
