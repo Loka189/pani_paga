@@ -52,9 +52,9 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-      ),
+      // appBar: AppBar(
+      //   backgroundColor: Colors.transparent,
+      // ),
       body: Container(
         width: double.infinity,
         height: double.infinity,
@@ -65,8 +65,128 @@ class _HomeScreenState extends State<HomeScreen> {
         child: SingleChildScrollView(
             child: Column(
           children: [
-            TextField(
-              controller: placeName,
+            Container(
+              margin: const EdgeInsets.fromLTRB(0, 60, 0, 0),
+              width: 350,
+              height: 50,
+              decoration: const BoxDecoration(
+                color: Colors.transparent,
+              ),
+              child: Center(
+                child: TextField(
+                  controller: placeName,
+                  cursorColor: Colors.white,
+                  style: const TextStyle(fontSize: 25, color: Colors.white),
+                  decoration: InputDecoration(
+                      hintText: 'Enter Location',
+                      hintStyle: TextStyle(
+                        fontSize: 20,
+                        color: Colors.white70,
+                      ),
+                      border: InputBorder.none,
+                      prefixIcon: Icon(
+                        Icons.location_on_rounded,
+                        size: 30,
+                      ),
+                      prefixIconColor: Colors.white,
+                      suffixIcon: InkWell(
+                        onTap: () async {
+                          var sendCity = GetCityGiveLatLon(placeName.text);
+                          var lattLonn = await sendCity.GetLatLon();
+                          var lat = lattLonn['lat'];
+                          var lon = lattLonn['lon'];
+                          var sendLatLon =
+                              await GetLatLanGiveWeatherData(lat, lon);
+                          var data = await sendLatLon.FetchData();
+                          lattt = data['lat'].toString();
+                          lonnn = data['lon'].toString();
+                          desc = data['desc'];
+                          temp = (data['temp'] - 273.15).toString();
+                          temp2 = double.parse(temp);
+                          temp3 = temp2.toStringAsFixed(2);
+                          pressure = data['pressure'].toString();
+                          humidity = data['humidity'].toString();
+                          wind_speed = (data['wind_speed'] * 3.6).toString();
+                          wind_speed2 = double.parse(wind_speed);
+                          wind_speed3 = wind_speed2.toStringAsFixed(1);
+                          //country = data['country'];
+                          //time convert
+                          int rise = data['sunrise'];
+                          DateTime dateTime1 =
+                              DateTime.fromMillisecondsSinceEpoch(rise * 1000);
+
+                          String formatDate(DateTime dateTime1) {
+                            String period = 'AM';
+                            int hour = dateTime1.hour;
+                            if (hour >= 12) {
+                              period = 'PM';
+                              if (hour > 12) {
+                                hour -= 12;
+                              }
+                            }
+                            String minutes =
+                                dateTime1.minute.toString().padLeft(2, '0');
+                            String formattedTime = '$hour:$minutes $period';
+                            return formattedTime;
+                          }
+
+                          sunrise = formatDate(dateTime1);
+
+                          int set = data['sunset'];
+                          DateTime dateTime2 =
+                              DateTime.fromMillisecondsSinceEpoch(set * 1000);
+                          String formatDate2(DateTime dateTime2) {
+                            String period = 'AM';
+                            int hour = dateTime2.hour;
+                            if (hour >= 12) {
+                              period = 'PM';
+                              if (hour > 12) {
+                                hour -= 12;
+                              }
+                            }
+                            String minutes =
+                                dateTime2.minute.toString().padLeft(2, '0');
+                            String formattedTime = '$hour:$minutes $period';
+                            return formattedTime;
+                          }
+
+                          sunset = formatDate2(dateTime2);
+
+                          //timezone = data['timezone'].toString();
+                          int timezoneOffsetSeconds = data['timezone'];
+                          String getUTCOffset(int timezoneOffsetSeconds) {
+                            Duration offset =
+                                Duration(seconds: timezoneOffsetSeconds.abs());
+                            String sign =
+                                (timezoneOffsetSeconds >= 0) ? '+' : '-';
+
+                            int hours = offset.inHours;
+                            int minutes = offset.inMinutes.remainder(60);
+
+                            String offsetString =
+                                '$sign${hours.toString().padLeft(2, '0')}:${minutes.toString().padLeft(2, '0')}';
+                            return 'UTC$offsetString';
+                          }
+
+                          timezone = getUTCOffset(timezoneOffsetSeconds);
+                          var sendingCode = await CountryName(data['country']);
+                          var counObj = await sendingCode.getFullName();
+                          Ccountry = counObj['Cname'];
+                          Fcountry = counObj['Oname'];
+                          countryCapital = counObj['capital'];
+                          continents = counObj['continent'];
+                          subregion = counObj['subregion'];
+                          setState(() {});
+                        },
+                        child: Icon(
+                          Icons.search_rounded,
+                          size: 30,
+                        ),
+                      ),
+                      suffixIconColor: Colors.white),
+                  textAlignVertical: TextAlignVertical.center,
+                ),
+              ),
             ),
             ElevatedButton(
                 onPressed: () async {
