@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
+import 'package:flutter/widgets.dart';
 
 void main() {
   runApp(MyApp());
@@ -103,7 +104,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           desc = data['desc'];
                           temp = (data['temp'] - 273.15).toString();
                           temp2 = double.parse(temp);
-                          temp3 = temp2.toStringAsFixed(2);
+                          temp3 = temp2.toStringAsFixed(1);
                           pressure = data['pressure'].toString();
                           humidity = data['humidity'].toString();
                           wind_speed = (data['wind_speed'] * 3.6).toString();
@@ -227,6 +228,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   Container(
                     width: 199,
+                    decoration: BoxDecoration(
+                        image: DecorationImage(
+                            image: AssetImage('assets/icons/extra1.png'))),
                     //color: Colors.amber,
                   )
                 ],
@@ -302,7 +306,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           Text(
                             Ccountry,
                             style: const TextStyle(
-                                color: Colors.white, fontSize: 20),
+                                color: Colors.white, fontSize: 15),
                           )
                         ],
                       ))
@@ -340,7 +344,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     style: const TextStyle(
                                         color: Colors.white, fontSize: 20)),
                               ]),
-                              Text(pressure,
+                              Text('$pressure mb',
                                   style: const TextStyle(
                                       color: Colors.white, fontSize: 20))
                             ]),
@@ -370,7 +374,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       color: Colors.white, fontSize: 20))
                             ],
                           ),
-                          Text(humidity,
+                          Text('$humidity%',
                               style:
                                   TextStyle(color: Colors.white, fontSize: 20))
                         ],
@@ -401,7 +405,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       color: Colors.white, fontSize: 20))
                             ],
                           ),
-                          Text(wind_speed3,
+                          Text('$wind_speed3 km/h',
                               style: const TextStyle(
                                   color: Colors.white, fontSize: 20))
                         ],
@@ -422,18 +426,77 @@ class _HomeScreenState extends State<HomeScreen> {
                   Container(
                       width: 100,
                       height: 100,
-                      color: Colors.amber,
-                      child: Text('sunrise $sunrise')),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(color: Colors.white54),
+                          gradient: LinearGradient(colors: [
+                            Colors.white.withOpacity(0.30),
+                            Colors.white.withOpacity(0.20),
+                            Colors.white.withOpacity(0.30)
+                          ])),
+                      child: Column(
+                        children: [
+                          const Text(
+                            'sunrise',
+                            style: TextStyle(fontSize: 20, color: Colors.white),
+                          ),
+                          Text(
+                            sunrise,
+                            textScaleFactor: 2,
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(color: Colors.white),
+                          )
+                        ],
+                      )),
+                  Container(
+                      width: 100,
+                      height: 80,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(color: Colors.white54),
+                          gradient: LinearGradient(colors: [
+                            Colors.white.withOpacity(0.30),
+                            Colors.white.withOpacity(0.20),
+                            Colors.white.withOpacity(0.30)
+                          ])),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text('Timezone',
+                              style:
+                                  TextStyle(fontSize: 20, color: Colors.white)),
+                          Text(
+                            timezone,
+                            textScaleFactor: 1.3,
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(color: Colors.white),
+                          )
+                        ],
+                      )),
                   Container(
                       width: 100,
                       height: 100,
-                      color: Colors.pink,
-                      child: Text('sunset $sunset')),
-                  Container(
-                      width: 100,
-                      height: 100,
-                      color: Colors.cyanAccent,
-                      child: Text('timezone $timezone'))
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(color: Colors.white54),
+                          gradient: LinearGradient(colors: [
+                            Colors.white.withOpacity(0.30),
+                            Colors.white.withOpacity(0.20),
+                            Colors.white.withOpacity(0.30)
+                          ])),
+                      child: Column(
+                        children: [
+                          const Text('sunset',
+                              style:
+                                  TextStyle(fontSize: 20, color: Colors.white)),
+                          Text(
+                            sunset,
+                            textScaleFactor: 2,
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(color: Colors.white),
+                          )
+                        ],
+                      ))
                 ],
               ),
             )
