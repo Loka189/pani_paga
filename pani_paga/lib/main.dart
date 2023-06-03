@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:flutter/widgets.dart';
+import 'package:intl/intl.dart';
 
 void main() {
   runApp(MyApp());
@@ -49,6 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
   var continents = '';
   var subregion = '';
   var timezone = '';
+  var time = DateTime.now();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -206,32 +208,51 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Row(
                 children: [
                   Container(
-                    width: 149,
+                    width: 169,
                     child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          Text(
-                            '$temp3',
-                            style: TextStyle(
-                                fontSize: 50,
-                                fontWeight: FontWeight.w500,
-                                color: Colors.white),
+                          Column(
+                            children: [
+                              Text(
+                                '$temp3 c',
+                                style: TextStyle(
+                                    fontSize: 50,
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.white),
+                              ),
+                              Text(
+                                ' $desc',
+                                style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w300,
+                                    color: Colors.white),
+                              ),
+                            ],
                           ),
                           Text(
-                            ' $desc',
-                            style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.w300,
-                                color: Colors.white),
+                            '${DateFormat('jm').format(time)}',
+                            style: TextStyle(fontSize: 25, color: Colors.white),
                           )
                         ]),
                   ),
-                  Container(
-                    width: 199,
-                    decoration: BoxDecoration(
-                        image: DecorationImage(
-                            image: AssetImage('assets/icons/extra1.png'))),
-                    //color: Colors.amber,
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Container(
+                        width: 128,
+                        height: 128,
+                        decoration: BoxDecoration(
+                            image: DecorationImage(
+                                image: AssetImage('assets/icons/sunny.png'),
+                                fit: BoxFit.cover)),
+                        //color: Colors.amber,
+                      ),
+                      Text(
+                        '${DateFormat('yMMMMEEEEd').format(time)}',
+                        style: TextStyle(fontSize: 17, color: Colors.white),
+                      )
+                    ],
                   )
                 ],
               ),
