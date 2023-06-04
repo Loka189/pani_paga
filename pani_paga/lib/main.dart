@@ -51,6 +51,27 @@ class _HomeScreenState extends State<HomeScreen> {
   var subregion = '';
   var timezone = '';
   var time = DateTime.now();
+  var time2 = '';
+  var date = '';
+  var weekday = '';
+  var main1 = '';
+  late String so;
+  String getIcon() {
+    if (so == 'Clouds') {
+      return 'assets/icons/cloudy.png';
+    } else if (so == 'Haze') {
+      return 'assets/icons/hazy.png';
+    } else if (so == 'Clear') {
+      return 'assets/icons/sunny.png';
+    } else if (so == 'Mist') {
+      return 'assets/icons/misty.png';
+    } else if (so == 'Rain') {
+      return 'assets/icons/rainy.png';
+    } else {
+      return 'assets/icons/humidity.png';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -98,11 +119,18 @@ class _HomeScreenState extends State<HomeScreen> {
                           var lattLonn = await sendCity.GetLatLon();
                           var lat = lattLonn['lat'];
                           var lon = lattLonn['lon'];
+                          var timeobj = GetTime(lat, lon);
+                          var timeMap = await timeobj.gettingTime();
+                          time2 = timeMap['time'];
+                          date = timeMap['date'];
+                          weekday = timeMap['dayofweek'];
                           var sendLatLon =
                               await GetLatLanGiveWeatherData(lat, lon);
                           var data = await sendLatLon.FetchData();
                           lattt = data['lat'].toString();
                           lonnn = data['lon'].toString();
+
+                          so = data['main'];
                           desc = data['desc'];
                           temp = (data['temp'] - 273.15).toString();
                           temp2 = double.parse(temp);
@@ -223,16 +251,21 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                               Text(
                                 ' $desc',
-                                style: TextStyle(
+                                style: const TextStyle(
                                     fontSize: 20,
                                     fontWeight: FontWeight.w300,
                                     color: Colors.white),
                               ),
                             ],
                           ),
+                          // Text(
+                          //   '${DateFormat('jm').format(time)}',
+                          //   style: TextStyle(fontSize: 25, color: Colors.white),
+                          // )
                           Text(
-                            '${DateFormat('jm').format(time)}',
-                            style: TextStyle(fontSize: 25, color: Colors.white),
+                            time2,
+                            style: const TextStyle(
+                                fontSize: 25, color: Colors.white),
                           )
                         ]),
                   ),
@@ -244,20 +277,25 @@ class _HomeScreenState extends State<HomeScreen> {
                         height: 128,
                         decoration: BoxDecoration(
                             image: DecorationImage(
-                                image: AssetImage('assets/icons/sunny.png'),
+                                image: AssetImage(getIcon()),
                                 fit: BoxFit.cover)),
                         //color: Colors.amber,
                       ),
+                      // Text(
+                      //   '${DateFormat('yMMMMEEEEd').format(time)}',
+                      //   style: TextStyle(fontSize: 17, color: Colors.white),
+                      // )
                       Text(
-                        '${DateFormat('yMMMMEEEEd').format(time)}',
-                        style: TextStyle(fontSize: 17, color: Colors.white),
+                        '$weekday, $date',
+                        style:
+                            const TextStyle(fontSize: 17, color: Colors.white),
                       )
                     ],
                   )
                 ],
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             Container(
@@ -360,7 +398,19 @@ class _HomeScreenState extends State<HomeScreen> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Row(children: [
-                                Icon(Icons.forest_rounded),
+                                // Image.asset('assets/icons/wind.png'),
+                                Container(
+                                  width: 30,
+                                  height: 30,
+                                  decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                          image: AssetImage(
+                                              'assets/icons/pressure.png'),
+                                          fit: BoxFit.cover)),
+                                ),
+                                SizedBox(
+                                  width: 10,
+                                ),
                                 Text('Pressure',
                                     style: const TextStyle(
                                         color: Colors.white, fontSize: 20)),
@@ -389,7 +439,18 @@ class _HomeScreenState extends State<HomeScreen> {
                         children: [
                           Row(
                             children: [
-                              Icon(Icons.abc_outlined),
+                              Container(
+                                width: 30,
+                                height: 30,
+                                decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                        image: AssetImage(
+                                            'assets/icons/humidity.png'),
+                                        fit: BoxFit.cover)),
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
                               Text('Humidity',
                                   style: const TextStyle(
                                       color: Colors.white, fontSize: 20))
@@ -412,7 +473,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           Colors.white.withOpacity(0.30)
                         ]),
                         borderRadius: BorderRadius.circular(35)),
-                    //child: Text('wind speed $wind_speed3')
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(8, 0, 12, 0),
                       child: Row(
@@ -420,7 +480,17 @@ class _HomeScreenState extends State<HomeScreen> {
                         children: [
                           Row(
                             children: [
-                              Icon(Icons.add_box_rounded),
+                              Container(
+                                width: 30,
+                                height: 30,
+                                decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                        image: AssetImage(
+                                            'assets/icons/wind.png'))),
+                              ),
+                              const SizedBox(
+                                width: 10,
+                              ),
                               Text('Wind speed',
                                   style: const TextStyle(
                                       color: Colors.white, fontSize: 20))
@@ -558,6 +628,7 @@ class GetLatLanGiveWeatherData {
     Map impData = {
       'lat': data['coord']['lat'],
       'lon': data['coord']['lon'],
+      'main': data['weather'][0]['main'],
       'desc': data['weather'][0]['description'],
       'temp': data['main']['temp'],
       'pressure': data['main']['pressure'],
@@ -587,5 +658,22 @@ class CountryName {
       'subregion': countryDetails[0]['subregion']
     };
     return details;
+  }
+}
+
+class GetTime {
+  var lat;
+  var lon;
+  GetTime(this.lat, this.lon);
+  Future<Map> gettingTime() async {
+    Response response = await get(Uri.parse(
+        'https://www.timeapi.io/api/Time/current/coordinate?latitude=$lat&longitude=$lon'));
+    Map details = jsonDecode(response.body);
+    Map timeDetails = {
+      'time': details['time'],
+      'dayofweek': details['dayOfWeek'],
+      'date': details['date'],
+    };
+    return timeDetails;
   }
 }
