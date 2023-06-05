@@ -56,6 +56,7 @@ class _HomeScreenState extends State<HomeScreen> {
   var weekday = '';
   var main1 = '';
   String so = '';
+  int hours = 0;
   String getIcon() {
     if (so == 'Clouds') {
       return 'assets/icons/cloudy.png';
@@ -72,6 +73,40 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  // String getBackground() {
+  //   if (hours > 00 && hours <= 5) {
+  //     return 'assets/images/nightbe.jpg';
+  //   } else if(hours>5 && hours<9){
+  //     return 'assets/images/mountainmor.jpg';
+
+  //   }else if(hours>9 && hours<12){
+  //     return 'assets/images/morning.jpg';}
+
+  //   else if(hours>12 && hours<4){
+  //     return 'assets/images/afternoon.jpg';
+  // }
+  String getBg() {
+    if (hours > 0 && hours <= 5) {
+      return 'assets/images/nightbe.jpg';
+    } else if (hours > 5 && hours <= 9) {
+      return 'assets/images/mountainmor.jpg';
+    } else if (hours > 9 && hours <= 12) {
+      return 'assets/images/morning.jpg';
+    } else if (hours > 12 && hours <= 15) {
+      return 'assets/images/afternoon.jpg';
+    } else if (hours > 15 && hours <= 18) {
+      return 'assets/images/evening.jpg';
+    } else if (hours > 18 && hours <= 19) {
+      return 'assets/images/sunsetmountains.jpg';
+    } else if (hours > 19 && hours <= 22) {
+      return 'assets/images/nightgirlhalfmoon.jpg';
+    } else if (hours > 22 && hours <= 00) {
+      return 'assets/images/night.jpg';
+    } else {
+      return 'assets/images/pathtosun.jpeg';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -82,10 +117,9 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Container(
         width: double.infinity,
         height: double.infinity,
-        decoration: const BoxDecoration(
-            image: DecorationImage(
-                image: AssetImage('assets/images/pathtosun.jpeg'),
-                fit: BoxFit.cover)),
+        decoration: BoxDecoration(
+            image:
+                DecorationImage(image: AssetImage(getBg()), fit: BoxFit.cover)),
         child: SingleChildScrollView(
             child: Column(
           children: [
@@ -122,8 +156,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           var timeobj = GetTime(lat, lon);
                           var timeMap = await timeobj.gettingTime();
                           time2 = timeMap['time'];
-                          print(time2);
-                          date = timeMap['date'];
+                          hours = int.parse(time2.substring(0, 2));
                           weekday = timeMap['dayofweek'];
                           var sendLatLon =
                               await GetLatLanGiveWeatherData(lat, lon);
