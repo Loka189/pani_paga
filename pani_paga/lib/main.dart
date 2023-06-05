@@ -55,7 +55,7 @@ class _HomeScreenState extends State<HomeScreen> {
   var date = '';
   var weekday = '';
   var main1 = '';
-  late String so;
+  String so = '';
   String getIcon() {
     if (so == 'Clouds') {
       return 'assets/icons/cloudy.png';
@@ -122,6 +122,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           var timeobj = GetTime(lat, lon);
                           var timeMap = await timeobj.gettingTime();
                           time2 = timeMap['time'];
+                          print(time2);
                           date = timeMap['date'];
                           weekday = timeMap['dayofweek'];
                           var sendLatLon =
