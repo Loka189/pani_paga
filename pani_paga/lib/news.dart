@@ -10,6 +10,12 @@ class NewsAPI extends StatefulWidget {
 class _NewsAPIState extends State<NewsAPI> {
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+      body: Container(
+        width: double.infinity,
+        height: double.infinity,
+        color: Colors.amber,
+      ),
+    );
   }
 }

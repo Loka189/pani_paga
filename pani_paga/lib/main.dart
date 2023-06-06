@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:flutter/widgets.dart';
+import 'package:pani_paga/news.dart';
 
 void main() {
   runApp(MyApp());
@@ -538,9 +539,17 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Text('Timezone',
-                              style:
-                                  TextStyle(fontSize: 20, color: Colors.white)),
+                          InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => const NewsAPI()));
+                            },
+                            child: const Text('Timezone',
+                                style: TextStyle(
+                                    fontSize: 20, color: Colors.white)),
+                          ),
                           Text(
                             timezone,
                             textScaleFactor: 1.3,
