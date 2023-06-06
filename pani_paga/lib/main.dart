@@ -249,11 +249,7 @@ class _HomeScreenState extends State<HomeScreen> {
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(50),
                   border: Border.all(color: Colors.white54),
-                  gradient: LinearGradient(colors: [
-                    Colors.white.withOpacity(0.30),
-                    Colors.white.withOpacity(0.20),
-                    Colors.white.withOpacity(0.30)
-                  ], begin: Alignment.topRight, end: Alignment.bottomLeft)),
+                  gradient: gradientColor()),
               child: Row(
                 children: [
                   Container(
@@ -668,5 +664,5 @@ Gradient gradientColor() {
     Colors.white.withOpacity(0.30),
     Colors.white.withOpacity(0.20),
     Colors.white.withOpacity(0.30)
-  ]);
+  ], begin: Alignment.topLeft, end: Alignment.bottomRight);
 }
