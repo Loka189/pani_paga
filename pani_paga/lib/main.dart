@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:flutter/widgets.dart';
-import 'package:intl/intl.dart';
 
 void main() {
   runApp(MyApp());
@@ -73,18 +72,6 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  // String getBackground() {
-  //   if (hours > 00 && hours <= 5) {
-  //     return 'assets/images/nightbe.jpg';
-  //   } else if(hours>5 && hours<9){
-  //     return 'assets/images/mountainmor.jpg';
-
-  //   }else if(hours>9 && hours<12){
-  //     return 'assets/images/morning.jpg';}
-
-  //   else if(hours>12 && hours<4){
-  //     return 'assets/images/afternoon.jpg';
-  // }
   String getBg() {
     if (hours > 0 && hours <= 5) {
       return 'assets/images/nightbe.jpg';
@@ -343,11 +330,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(20),
                           border: Border.all(color: Colors.white54),
-                          gradient: LinearGradient(colors: [
-                            Colors.white.withOpacity(0.30),
-                            Colors.white.withOpacity(0.20),
-                            Colors.white.withOpacity(0.30)
-                          ])),
+                          gradient: gradientColor()),
                       child: Column(
                         children: [
                           const Text(
@@ -365,11 +348,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(20),
                           border: Border.all(color: Colors.white54),
-                          gradient: LinearGradient(colors: [
-                            Colors.white.withOpacity(0.30),
-                            Colors.white.withOpacity(0.20),
-                            Colors.white.withOpacity(0.30)
-                          ])),
+                          gradient: gradientColor()),
                       child: Column(
                         children: [
                           const Text('longitude',
@@ -386,11 +365,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(20),
                           border: Border.all(color: Colors.white54),
-                          gradient: LinearGradient(colors: [
-                            Colors.white.withOpacity(0.30),
-                            Colors.white.withOpacity(0.20),
-                            Colors.white.withOpacity(0.30)
-                          ])),
+                          gradient: gradientColor()),
                       child: Column(
                         children: [
                           const Text('country',
@@ -420,11 +395,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       width: double.infinity,
                       height: 90,
                       decoration: BoxDecoration(
-                          gradient: LinearGradient(colors: [
-                            Colors.white.withOpacity(0.30),
-                            Colors.white.withOpacity(0.20),
-                            Colors.white.withOpacity(0.30)
-                          ]),
+                          gradient: gradientColor(),
                           borderRadius: BorderRadius.circular(35)),
                       child: Padding(
                         padding: const EdgeInsets.fromLTRB(8.0, 0, 12, 0),
@@ -460,11 +431,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     width: double.infinity,
                     height: 90,
                     decoration: BoxDecoration(
-                        gradient: LinearGradient(colors: [
-                          Colors.white.withOpacity(0.30),
-                          Colors.white.withOpacity(0.20),
-                          Colors.white.withOpacity(0.30)
-                        ]),
+                        gradient: gradientColor(),
                         borderRadius: BorderRadius.circular(35)),
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(8.0, 0, 12, 0),
@@ -501,11 +468,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     width: double.infinity,
                     height: 90,
                     decoration: BoxDecoration(
-                        gradient: LinearGradient(colors: [
-                          Colors.white.withOpacity(0.30),
-                          Colors.white.withOpacity(0.20),
-                          Colors.white.withOpacity(0.30)
-                        ]),
+                        gradient: gradientColor(),
                         borderRadius: BorderRadius.circular(35)),
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(8, 0, 12, 0),
@@ -554,11 +517,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(20),
                           border: Border.all(color: Colors.white54),
-                          gradient: LinearGradient(colors: [
-                            Colors.white.withOpacity(0.30),
-                            Colors.white.withOpacity(0.20),
-                            Colors.white.withOpacity(0.30)
-                          ])),
+                          gradient: gradientColor()),
                       child: Column(
                         children: [
                           const Text(
@@ -579,11 +538,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(20),
                           border: Border.all(color: Colors.white54),
-                          gradient: LinearGradient(colors: [
-                            Colors.white.withOpacity(0.30),
-                            Colors.white.withOpacity(0.20),
-                            Colors.white.withOpacity(0.30)
-                          ])),
+                          gradient: gradientColor()),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -604,11 +559,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(20),
                           border: Border.all(color: Colors.white54),
-                          gradient: LinearGradient(colors: [
-                            Colors.white.withOpacity(0.30),
-                            Colors.white.withOpacity(0.20),
-                            Colors.white.withOpacity(0.30)
-                          ])),
+                          gradient: gradientColor()),
                       child: Column(
                         children: [
                           const Text('sunset',
@@ -710,4 +661,12 @@ class GetTime {
     };
     return timeDetails;
   }
+}
+
+Gradient gradientColor() {
+  return LinearGradient(colors: [
+    Colors.white.withOpacity(0.30),
+    Colors.white.withOpacity(0.20),
+    Colors.white.withOpacity(0.30)
+  ]);
 }
