@@ -1,12 +1,13 @@
 import 'dart:convert';
+import 'package:date_format/date_format.dart';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
-import 'package:flutter/widgets.dart';
+import 'package:intl/intl.dart';
 import 'package:pani_paga/news.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -57,6 +58,10 @@ class _HomeScreenState extends State<HomeScreen> {
   var main1 = '';
   String so = '';
   int hours = 0;
+  int year = 0;
+  int month = 0;
+  int day = 0;
+  var newdate = '';
   String getIcon() {
     if (so == 'Clouds') {
       return 'assets/icons/cloudy.png';
@@ -99,9 +104,6 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
-      // appBar: AppBar(
-      //   backgroundColor: Colors.transparent,
-      // ),
       body: Container(
         width: double.infinity,
         height: double.infinity,
@@ -112,7 +114,7 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Column(
           children: [
             Container(
-              margin: const EdgeInsets.fromLTRB(0, 60, 0, 0),
+              margin: const EdgeInsets.fromLTRB(0, 40, 0, 0),
               width: 350,
               height: 50,
               decoration: const BoxDecoration(
@@ -146,8 +148,16 @@ class _HomeScreenState extends State<HomeScreen> {
                           time2 = timeMap['time'];
                           hours = int.parse(time2.substring(0, 2));
                           weekday = timeMap['dayofweek'];
-                          var sendLatLon =
-                              await GetLatLanGiveWeatherData(lat, lon);
+                          date = timeMap['date'];
+                          month = int.parse(date.substring(0, 2));
+                          day = int.parse(date.substring(3, 5));
+                          year = int.parse(date.substring(6));
+                          final inputDate = DateTime(year, month, day);
+                          final inputFormat = DateFormat('MM-dd-yyyy');
+                          final outputFormat = DateFormat('MMMM dd, yyyy');
+                          final convertedDate = outputFormat.format(inputDate);
+                          newdate = convertedDate.toString();
+                          var sendLatLon = GetLatLanGiveWeatherData(lat, lon);
                           var data = await sendLatLon.FetchData();
                           lattt = data['lat'].toString();
                           lonnn = data['lon'].toString();
@@ -229,6 +239,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           countryCapital = counObj['capital'];
                           continents = counObj['continent'];
                           subregion = counObj['subregion'];
+                          print(convertedDate);
                           setState(() {});
                         },
                         child: const Icon(
@@ -253,7 +264,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   gradient: gradientColor()),
               child: Row(
                 children: [
-                  Container(
+                  SizedBox(
                     width: 169,
                     child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -262,7 +273,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             children: [
                               Text(
                                 '$temp3 c',
-                                style: TextStyle(
+                                style: const TextStyle(
                                     fontSize: 50,
                                     fontWeight: FontWeight.w500,
                                     color: Colors.white),
@@ -276,10 +287,6 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ],
                           ),
-                          // Text(
-                          //   '${DateFormat('jm').format(time)}',
-                          //   style: TextStyle(fontSize: 25, color: Colors.white),
-                          // )
                           Text(
                             time2,
                             style: const TextStyle(
@@ -288,7 +295,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ]),
                   ),
                   Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Container(
                         width: 128,
@@ -297,16 +304,17 @@ class _HomeScreenState extends State<HomeScreen> {
                             image: DecorationImage(
                                 image: AssetImage(getIcon()),
                                 fit: BoxFit.cover)),
-                        //color: Colors.amber,
                       ),
-                      // Text(
-                      //   '${DateFormat('yMMMMEEEEd').format(time)}',
-                      //   style: TextStyle(fontSize: 17, color: Colors.white),
-                      // )
                       Text(
-                        '$weekday, $date',
+                        weekday,
                         style:
                             const TextStyle(fontSize: 17, color: Colors.white),
+                      ),
+                      StyleText(
+                        text: newdate,
+                        size: 17,
+                        weight: FontWeight.w300,
+                        color: Colors.white,
                       )
                     ],
                   )
@@ -316,7 +324,7 @@ class _HomeScreenState extends State<HomeScreen> {
             const SizedBox(
               height: 20,
             ),
-            Container(
+            SizedBox(
               width: 380,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -404,17 +412,17 @@ class _HomeScreenState extends State<HomeScreen> {
                                 Container(
                                   width: 30,
                                   height: 30,
-                                  decoration: BoxDecoration(
+                                  decoration: const BoxDecoration(
                                       image: DecorationImage(
                                           image: AssetImage(
                                               'assets/icons/pressure.png'),
                                           fit: BoxFit.cover)),
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   width: 10,
                                 ),
-                                Text('Pressure',
-                                    style: const TextStyle(
+                                const Text('Pressure',
+                                    style: TextStyle(
                                         color: Colors.white, fontSize: 20)),
                               ]),
                               Text('$pressure mb',
@@ -423,7 +431,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             ]),
                       )),
                   Container(
-                    margin: EdgeInsets.only(
+                    margin: const EdgeInsets.only(
                         bottom: 10.0, left: 0, right: 0, top: 0),
                     width: double.infinity,
                     height: 90,
@@ -440,23 +448,23 @@ class _HomeScreenState extends State<HomeScreen> {
                               Container(
                                 width: 30,
                                 height: 30,
-                                decoration: BoxDecoration(
+                                decoration: const BoxDecoration(
                                     image: DecorationImage(
                                         image: AssetImage(
                                             'assets/icons/humidity.png'),
                                         fit: BoxFit.cover)),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 width: 10,
                               ),
-                              Text('Humidity',
-                                  style: const TextStyle(
+                              const Text('Humidity',
+                                  style: TextStyle(
                                       color: Colors.white, fontSize: 20))
                             ],
                           ),
                           Text('$humidity%',
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 20))
+                              style: const TextStyle(
+                                  color: Colors.white, fontSize: 20))
                         ],
                       ),
                     ),
@@ -477,7 +485,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               Container(
                                 width: 30,
                                 height: 30,
-                                decoration: BoxDecoration(
+                                decoration: const BoxDecoration(
                                     image: DecorationImage(
                                         image: AssetImage(
                                             'assets/icons/wind.png'))),
@@ -485,8 +493,8 @@ class _HomeScreenState extends State<HomeScreen> {
                               const SizedBox(
                                 width: 10,
                               ),
-                              Text('Wind speed',
-                                  style: const TextStyle(
+                              const Text('Wind speed',
+                                  style: TextStyle(
                                       color: Colors.white, fontSize: 20))
                             ],
                           ),
@@ -541,10 +549,11 @@ class _HomeScreenState extends State<HomeScreen> {
                         children: [
                           InkWell(
                             onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => const NewsAPI()));
+                              Navigator.push(context, MaterialPageRoute(
+                                builder: (context) {
+                                  return NewsAPI();
+                                },
+                              ));
                             },
                             child: const Text('Timezone',
                                 style: TextStyle(
@@ -674,4 +683,24 @@ Gradient gradientColor() {
     Colors.white.withOpacity(0.20),
     Colors.white.withOpacity(0.30)
   ], begin: Alignment.topLeft, end: Alignment.bottomRight);
+}
+
+class StyleText extends StatelessWidget {
+  final String text;
+  final double size;
+  final Color color;
+  final FontWeight? weight;
+  const StyleText(
+      {Key? key,
+      required this.text,
+      required this.size,
+      this.color = Colors.white,
+      this.weight = FontWeight.normal})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(text,
+        style: TextStyle(fontSize: size, color: color, fontWeight: weight));
+  }
 }
