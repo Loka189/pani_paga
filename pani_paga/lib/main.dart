@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:date_format/date_format.dart';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
@@ -79,7 +78,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   String getBg() {
-    if (hours > 0 && hours <= 5) {
+    if (hours > 00 && hours <= 5) {
       return 'assets/images/nightbe.jpg';
     } else if (hours > 5 && hours <= 9) {
       return 'assets/images/mountainmor.jpg';
@@ -153,7 +152,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           day = int.parse(date.substring(3, 5));
                           year = int.parse(date.substring(6));
                           final inputDate = DateTime(year, month, day);
-                          final inputFormat = DateFormat('MM-dd-yyyy');
                           final outputFormat = DateFormat('MMMM dd, yyyy');
                           final convertedDate = outputFormat.format(inputDate);
                           newdate = convertedDate.toString();
@@ -239,7 +237,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           countryCapital = counObj['capital'];
                           continents = counObj['continent'];
                           subregion = counObj['subregion'];
-                          print(convertedDate);
+
                           setState(() {});
                         },
                         child: const Icon(

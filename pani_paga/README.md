@@ -14,3 +14,9 @@ A few resources to get you started if this is your first Flutter project:
 For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
+
+
+## Basic structure of Weather Application
+
+This app is divided into 5 sections.
+- section_00: It contains the part where user can provide City name and get desired details.
