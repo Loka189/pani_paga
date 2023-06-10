@@ -33,15 +33,15 @@ class _HomeScreenState extends State<HomeScreen> {
   var placeName = TextEditingController();
   var lattt = '';
   var lonnn = '';
+  var main = '';
   var desc = '';
-  var temp = '';
-  late double temp2;
-  var temp3 = '';
+  late double temp;
+  var tempIn3digits = '';
   var pressure = '';
   var humidity = '';
-  var wind_speed = '';
-  late double wind_speed2;
-  var wind_speed3 = '';
+  late double windSpeed;
+
+  var windSpeedIn2digits = '';
   var sunrise = '';
   var sunset = '';
   var Ccountry = '';
@@ -55,22 +55,22 @@ class _HomeScreenState extends State<HomeScreen> {
   var date = '';
   var weekday = '';
   var main1 = '';
-  String so = '';
+
   int hours = 0;
   int year = 0;
   int month = 0;
   int day = 0;
   var newdate = '';
   String getIcon() {
-    if (so == 'Clouds') {
+    if (main == 'Clouds') {
       return 'assets/icons/cloudy.png';
-    } else if (so == 'Haze') {
+    } else if (main == 'Haze') {
       return 'assets/icons/hazy.png';
-    } else if (so == 'Clear') {
+    } else if (main == 'Clear') {
       return 'assets/icons/sunny.png';
-    } else if (so == 'Mist') {
+    } else if (main == 'Mist') {
       return 'assets/icons/misty.png';
-    } else if (so == 'Rain') {
+    } else if (main == 'Rain') {
       return 'assets/icons/rainy.png';
     } else {
       return 'assets/icons/humidity.png';
@@ -140,9 +140,10 @@ class _HomeScreenState extends State<HomeScreen> {
                         onTap: () async {
                           var sendCity = GetCityGiveLatLon(placeName.text);
                           var lattLonn = await sendCity.GetLatLon();
-                          var lat = lattLonn['lat'];
-                          var lon = lattLonn['lon'];
-                          var timeobj = GetTime(lat, lon);
+
+                          lattt = lattLonn['lat'].toString();
+                          lonnn = lattLonn['lon'].toString();
+                          var timeobj = GetTime(lattt, lonnn);
                           var timeMap = await timeobj.gettingTime();
                           time2 = timeMap['time'];
                           hours = int.parse(time2.substring(0, 2));
@@ -155,22 +156,22 @@ class _HomeScreenState extends State<HomeScreen> {
                           final outputFormat = DateFormat('MMMM dd, yyyy');
                           final convertedDate = outputFormat.format(inputDate);
                           newdate = convertedDate.toString();
-                          var sendLatLon = GetLatLanGiveWeatherData(lat, lon);
+                          var sendLatLon =
+                              GetLatLanGiveWeatherData(lattt, lonnn);
                           var data = await sendLatLon.FetchData();
-                          lattt = data['lat'].toString();
-                          lonnn = data['lon'].toString();
-
-                          so = data['main'];
+                          main = data['main'];
                           desc = data['desc'];
-                          temp = (data['temp'] - 273.15).toString();
-                          temp2 = double.parse(temp);
-                          temp3 = temp2.toStringAsFixed(1);
+                          temp =
+                              double.parse((data['temp'] - 273.15).toString());
+
+                          tempIn3digits = temp.toStringAsFixed(1);
                           pressure = data['pressure'].toString();
                           humidity = data['humidity'].toString();
-                          wind_speed = (data['wind_speed'] * 3.6).toString();
-                          wind_speed2 = double.parse(wind_speed);
-                          wind_speed3 = wind_speed2.toStringAsFixed(1);
-                          //country = data['country'];
+                          windSpeed = double.parse(
+                              (data['wind_speed'] * 3.6).toString());
+
+                          windSpeedIn2digits = windSpeed.toStringAsFixed(1);
+
                           //time convert
                           int rise = data['sunrise'];
                           DateTime dateTime1 =
@@ -270,7 +271,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           Column(
                             children: [
                               Text(
-                                '$temp3 c',
+                                '$tempIn3digits c',
                                 style: const TextStyle(
                                     fontSize: 50,
                                     fontWeight: FontWeight.w500,
@@ -496,7 +497,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       color: Colors.white, fontSize: 20))
                             ],
                           ),
-                          Text('$wind_speed3 km/h',
+                          Text('$windSpeedIn2digits km/h',
                               style: const TextStyle(
                                   color: Colors.white, fontSize: 20))
                         ],
@@ -623,8 +624,6 @@ class GetLatLanGiveWeatherData {
     Map data = jsonDecode(responseMain.body);
     //creating map
     Map impData = {
-      'lat': data['coord']['lat'],
-      'lon': data['coord']['lon'],
       'main': data['weather'][0]['main'],
       'desc': data['weather'][0]['description'],
       'temp': data['main']['temp'],
